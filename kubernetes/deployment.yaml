@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
+
 metadata:
   name: securebank-api
   namespace: securebank
@@ -17,10 +18,50 @@ spec:
         app: securebank-api
 
     spec:
-      containers:
-      - name: api
-        image: securebank-api:v1
-        imagePullPolicy: Never
+      automountServiceAccountToken: false
 
-        ports:
-        - containerPort: 5000
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+
+      containers:
+        - name: api
+
+          image: securebank-api:v1
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 5000
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+
+            capabilities:
+              drop:
+                - ALL
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          resources:
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
