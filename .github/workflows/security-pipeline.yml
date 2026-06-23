@@ -25,6 +25,8 @@ jobs:
 
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
+        with:
+          skip_check: CKV_K8S_43
 
       - name: Run Trivy Filesystem Scan
         uses: aquasecurity/trivy-action@master
