@@ -1,0 +1,13 @@
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+
+**pycache**/
+*.pyc
+
+.env
+.env.*
+
+*.log
+screenshots/
