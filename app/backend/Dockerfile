@@ -10,13 +10,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN chown -R secureuser:secureuser /app
+RUN chown -R secureuser /app
 
 USER secureuser
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 
-CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"
 
 EXPOSE 5000
 
-CMD ["gunicorn","-b","0.0.0.0:5000","app:app"]
+CMD ["gunicorn","-b","0.0.0.0:5000","app"]
