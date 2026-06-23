@@ -3,11 +3,10 @@
 *.tfstate.backup
 *.tfvars
 
-**pycache**/
+__pycache__/
 *.pyc
 
 .env
 .env.*
 
 *.log
-screenshots/
