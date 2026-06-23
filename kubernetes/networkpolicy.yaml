@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+
+metadata:
+  name: securebank-network-policy
+  namespace: securebank
+
+spec:
+  podSelector:
+    matchLabels:
+      app: securebank-api
+
+  policyTypes:
+    - Ingress
+    - Egress
+
+  ingress:
+    - {}
+
+  egress:
+    - {}
