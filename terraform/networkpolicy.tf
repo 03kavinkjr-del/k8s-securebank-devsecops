@@ -5,10 +5,23 @@ resource "kubernetes_network_policy" "securebank_policy" {
   }
 
   spec {
-    pod_selector {}
+    pod_selector {
+      match_labels = {
+        app = "securebank-api"
+      }
+    }
 
-    policy_types = ["Ingress"]
+    policy_types = [
+      "Ingress",
+      "Egress"
+    ]
 
-    ingress {}
+    ingress {
+      from {
+        pod_selector {}
+      }
+    }
+
+    egress {}
   }
 }
