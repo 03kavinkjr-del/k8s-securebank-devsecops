@@ -29,7 +29,7 @@ resource "kubernetes_deployment" "securebank_api" {
 
         security_context {
           run_as_non_root = true
-          run_as_user     = 1001
+          run_as_user     = 10000
         }
 
         container {
@@ -47,7 +47,7 @@ resource "kubernetes_deployment" "securebank_api" {
             read_only_root_filesystem  = true
 
             capabilities {
-              drop = ["NET_RAW"]
+              drop = ["ALL"]
             }
           }
 
