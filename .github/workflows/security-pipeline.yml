@@ -1,0 +1,35 @@
+name: SecureBank DevSecOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@master
+
+      - name: Run Trivy Filesystem Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: .
+
+      - name: Terraform Validate
+        run: |
+          cd terraform
+          terraform init
+          terraform validate
