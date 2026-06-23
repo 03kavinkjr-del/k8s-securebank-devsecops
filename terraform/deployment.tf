@@ -6,7 +6,6 @@ resource "kubernetes_deployment" "securebank_api" {
     labels = {
       app = "securebank-api"
     }
-
   }
 
   spec {
@@ -26,6 +25,8 @@ resource "kubernetes_deployment" "securebank_api" {
       }
 
       spec {
+        service_account_name = kubernetes_service_account.securebank_sa.metadata[0].name
+
         security_context {
           run_as_non_root = true
           run_as_user     = 1001
@@ -84,6 +85,5 @@ resource "kubernetes_deployment" "securebank_api" {
         }
       }
     }
-
   }
 }
