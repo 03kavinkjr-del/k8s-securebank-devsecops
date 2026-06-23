@@ -2,8 +2,8 @@ replicaCount: 2
 
 image:
   repository: securebank-api
-  pullPolicy: Never
-  tag: "v1"
+  pullPolicy: Always
+  tag: "v2"
 
 imagePullSecrets: []
 
@@ -12,7 +12,7 @@ fullnameOverride: ""
 
 serviceAccount:
   create: true
-  automount: true
+  automount: false
   annotations: {}
   name: ""
 
@@ -20,12 +20,21 @@ podAnnotations: {}
 
 podLabels: {}
 
-podSecurityContext: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1001
+  seccompProfile:
+    type: RuntimeDefault
 
 securityContext:
   runAsNonRoot: true
+  runAsUser: 1001
   allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: false
+  readOnlyRootFilesystem: true
+
+  capabilities:
+    drop:
+      - ALL
 
 service:
   type: NodePort
@@ -38,7 +47,6 @@ resources:
   limits:
     cpu: 250m
     memory: 256Mi
-
   requests:
     cpu: 100m
     memory: 128Mi
@@ -65,15 +73,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
 httpRoute:
   enabled: false
-image:
-  repository: securebank-api
-  pullPolicy: Never
-  tag: "v2"
-
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 1001
-  allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: false
